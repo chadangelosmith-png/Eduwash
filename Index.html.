@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduWash by Active Solutions</title>
+<meta name="theme-color" content="#0b2545">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#0b2545;background:#f4fbfc;line-height:1.5}
+header{background:linear-gradient(135deg,#0b2545,#13628a);color:#fff;padding:40px 20px 56px;text-align:center}
+.brand{font-size:2.4rem;font-weight:800}.brand span{color:#3ee0d0}
+.by{opacity:.8;font-size:.9rem}
+.tag{font-size:1.5rem;font-weight:700;margin-top:18px}
+.cta{display:inline-block;margin-top:22px;background:#3ee0d0;color:#0b2545;font-weight:800;padding:16px 34px;border-radius:40px;text-decoration:none}
+main{max-width:640px;margin:-30px auto 0;padding:0 16px 40px}
+.card{background:#fff;border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(11,37,69,.08)}
+h2{font-size:1.3rem;margin-bottom:12px}
+label{display:block;font-weight:700;margin:16px 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{flex:1 1 30%;border:2px solid #cfe3ea;background:#fff;border-radius:12px;padding:12px 6px;font-size:1rem;font-weight:700;color:#0b2545}
+.opt.on{background:#0b2545;color:#fff}
+input{width:100%;padding:14px;border:2px solid #cfe3ea;border-radius:12px;font-size:1rem;margin-top:8px}
+#price{margin-top:16px;font-size:1.2rem;font-weight:800;text-align:center}
+#book{width:100%;margin-top:16px;background:#25d366;color:#fff;border:0;border-radius:14px;padding:18px;font-size:1.15rem;font-weight:800}
+#book:disabled{background:#b8c7cc}
+.note{background:#e8fbf8;border-left:5px solid #3ee0d0;padding:12px;border-radius:8px;margin-top:14px}
+table{width:100%;border-collapse:collapse}td,th{padding:9px 6px;border-bottom:1px solid #e3eef2;text-align:left}
+.sub{background:#0b2545;color:#fff}.sub li{margin:6px 0 6px 18px}
+footer{text-align:center;padding:24px;font-size:.9rem}
+</style>
+</head>
+<body>
+<header>
+<div class="brand">Edu<span>Wash</span></div>
+<div class="by">by Active Solutions</div>
+<div class="tag">You teach. We wash.</div>
+<div class="slogan"></div>
+<a class="cta" href="#booking">Book my wash</a>
+</header>
+<main>
+<section class="card"><h2>How it works</h2>
+<p>1. Pick your day below.<br>2. Leave your keys with the school secretary.<br>3. Your car is clean before the final bell, and your keys are back with the secretary.</p></section>
+<section class="card" id="booking"><h2>Book your wash</h2>
+<label>1. Which day?</label>
+<div class="opts" data-g="day"><button class="opt">Monday</button><button class="opt">Tuesday</button><button class="opt">Wednesday</button><button class="opt">Thursday</button><button class="opt">Friday</button></div>
+<label>2. Your car</label>
+<div class="opts" data-g="car"><button class="opt">Hatchback</button><button class="opt">SUV / Minivan</button></div>
+<label>3. Which wash?</label>
+<div class="opts" data-g="wash"><button class="opt">Outside only</button><button class="opt">Inside only</button><button class="opt">Inside &amp; outside</button><button class="opt">Semi detail</button><button class="opt">Subscription</button></div>
+<label>4. Your details</label>
+<input id="nm" placeholder="Your name"><input id="sc" placeholder="Your school"><input id="rg" placeholder="Car colour and registration">
+<div id="price"></div>
+<button id="book" disabled>Confirm on WhatsApp</button>
+<div class="note">On your wash day, leave your keys with the school secretary. We collect them, wash your car and hand them back. Monday to Friday, 08:00 to 15:30.</div></section>
+<section class="card"><h2>Prices</h2><table><tr><th>Wash</th><th>Hatchback</th><th>SUV / Minivan</th></tr><tr><td>Outside only</td><td>R80</td><td>R100</td></tr><tr><td>Inside only</td><td>R80</td><td>R100</td></tr><tr><td>Inside &amp; outside</td><td>R130</td><td>R160</td></tr><tr><td>Semi detail</td><td>R250</td><td>R300</td></tr></table></section>
+<section class="card sub"><h2>Subscribe and save</h2><p><b>R105 per school week</b> for a hatchback, or <b>R130</b> for an SUV or minivan. One inside-and-outside wash every week.</p><ul><li>Free tyre shine on every wash</li><li>Free semi-detail upgrade every third month</li><li>R50 off when you sign up a colleague</li><li>You pay only for school weeks, never for holidays</li><li>Holiday home washes in Mitchells Plain at the subscriber rate</li></ul></section>
+<section class="card"><h2>More than a car wash</h2><p>EduWash gives educators back their afternoons and weekends, and gives young people in Mitchells Plain a future. Every wash is done by a matriculant on a one-year paid internship, learning skills, discipline and service.</p><p><b>Every wash you book helps launch a young person's career.</b></p></section>
+<section class="card"><h2>Your car is safe with us</h2><p>Your vehicle and everything inside it are our first priority. Every key handover is logged and every car is photographed before and after. We bring our own waterless products, so no school water is used.</p></section>
+</main>
+<footer>EduWash by Active Solutions, Mitchells Plain<br>WhatsApp or call <a href="https://wa.me/27679636237">067 963 6237</a></footer>
+<script>
+const s={};
+document.querySelectorAll('.opts').forEach(g=>g.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{g.querySelectorAll('.opt').forEach(x=>x.classList.remove('on'));b.classList.add('on');s[g.dataset.g]=b.textContent;u();}));
+const P={'Outside only':[80,100],'Inside only':[80,100],'Inside & outside':[130,160],'Semi detail':[250,300],'Subscription':[105,130]};
+const $=i=>document.getElementById(i);
+function u(){if(s.car&&s.wash){const p=P[s.wash][s.car==='Hatchback'?0:1];$('price').textContent=s.wash==='Subscription'?'R'+p+' per school week':'R'+p;}
+$('book').disabled=!(s.day&&s.car&&s.wash&&$('nm').value&&$('sc').value);}
+['nm','sc','rg'].forEach(i=>$(i).oninput=u);
+$('book').onclick=()=>{const m='Hi EduWash! I would like to book:\nDay: '+s.day+'\nCar: '+s.car+'\nWash: '+s.wash+'\nName: '+$('nm').value+'\nSchool: '+$('sc').value+'\nCar details: '+$('rg').value+'\nI will leave my keys with the secretary.';location.href='https://wa.me/27679636237?text='+encodeURIComponent(m);};
+</script>
+</body>
+</html>
