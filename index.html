@@ -2,72 +2,401 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EduWash by Active Solutions</title>
-<meta name="theme-color" content="#0b2545">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EduWash by Active Solutions · You teach. We wash.</title>
+<meta name="description" content="Mobile car wash for educators in Mitchells Plain. We wash your car while you teach.">
+<meta name="theme-color" content="#0D2B4E">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+/* ===== EDIT THESE THREE THINGS IN THE SCRIPT AT THE BOTTOM: FULL_DAYS, CLOSED_DAYS, SLOTS_PER_DAY ===== */
+:root{
+  --navy:#0D2B4E; --navy-2:#163E6A; --aqua:#2FD1C5; --aqua-soft:#E3F7F5;
+  --bell:#FFC93C; --chalk:#F7FAFB; --slate:#566577; --line:#D7E3EA; --mud:#8A6D4B;
+  --display:"Bricolage Grotesque", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,sans-serif;color:#0b2545;background:#f4fbfc;line-height:1.5}
-header{background:linear-gradient(135deg,#0b2545,#13628a);color:#fff;padding:40px 20px 56px;text-align:center}
-.brand{font-size:2.4rem;font-weight:800}.brand span{color:#3ee0d0}
-.by{opacity:.8;font-size:.9rem}
-.tag{font-size:1.5rem;font-weight:700;margin-top:18px}
-.cta{display:inline-block;margin-top:22px;background:#3ee0d0;color:#0b2545;font-weight:800;padding:16px 34px;border-radius:40px;text-decoration:none}
-main{max-width:640px;margin:-30px auto 0;padding:0 16px 40px}
-.card{background:#fff;border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(11,37,69,.08)}
-h2{font-size:1.3rem;margin-bottom:12px}
-label{display:block;font-weight:700;margin:16px 0 8px}
-.opts{display:flex;flex-wrap:wrap;gap:8px}
-.opt{flex:1 1 30%;border:2px solid #cfe3ea;background:#fff;border-radius:12px;padding:12px 6px;font-size:1rem;font-weight:700;color:#0b2545}
-.opt.on{background:#0b2545;color:#fff}
-input{width:100%;padding:14px;border:2px solid #cfe3ea;border-radius:12px;font-size:1rem;margin-top:8px}
-#price{margin-top:16px;font-size:1.2rem;font-weight:800;text-align:center}
-#book{width:100%;margin-top:16px;background:#25d366;color:#fff;border:0;border-radius:14px;padding:18px;font-size:1.15rem;font-weight:800}
-#book:disabled{background:#b8c7cc}
-.note{background:#e8fbf8;border-left:5px solid #3ee0d0;padding:12px;border-radius:8px;margin-top:14px}
-table{width:100%;border-collapse:collapse}td,th{padding:9px 6px;border-bottom:1px solid #e3eef2;text-align:left}
-.sub{background:#0b2545;color:#fff}.sub li{margin:6px 0 6px 18px}
-footer{text-align:center;padding:24px;font-size:.9rem}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);color:var(--navy);background:var(--chalk);line-height:1.55;font-size:17px;padding-bottom:env(safe-area-inset-bottom)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--bell);outline-offset:3px}
+h1,h2,h3{font-family:var(--display);line-height:1.05;letter-spacing:-.02em}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+
+/* ---------- HERO: the school day ---------- */
+.hero{background:var(--navy);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 0 0;overflow:hidden;position:relative}
+.top{display:flex;justify-content:space-between;align-items:center}
+.mark{font-family:var(--display);font-weight:800;font-size:1.35rem}
+.mark small{display:block;font-family:var(--body);font-weight:500;font-size:.72rem;opacity:.7;letter-spacing:0}
+.top a{font-weight:600;font-size:.9rem;text-decoration:none;border:1.5px solid rgba(255,255,255,.35);padding:8px 14px;border-radius:999px}
+.hero h1{font-size:clamp(3rem,13vw,5.6rem);font-weight:800;margin:34px 0 10px}
+.hero h1 span{display:block}
+.hero h1 .w2{color:var(--aqua)}
+.lede{font-size:1.1rem;max-width:30ch;opacity:.9}
+.slogan{font-style:italic;opacity:.75;margin-top:8px;min-height:1.4em}
+.cta{display:inline-flex;align-items:center;gap:10px;margin-top:24px;background:var(--bell);color:var(--navy);font-weight:700;font-size:1.1rem;padding:16px 26px;border-radius:14px;text-decoration:none;border:0;cursor:pointer}
+.cta:active{transform:translateY(1px)}
+.day{margin-top:34px;position:relative}
+.day svg{display:block;width:100%;height:auto}
+.daynote{display:flex;justify-content:space-between;font-size:.8rem;opacity:.7;padding:0 2px 18px}
+
+/* car animation: one moment, on load */
+#car{animation:drive 4.2s cubic-bezier(.45,.05,.3,1) .4s both}
+#dirt{animation:clean 1.6s ease 2.1s both}
+.bub{opacity:0;animation:bub 1.8s ease-out both}
+.spark{opacity:0;transform-origin:center;transform-box:fill-box;animation:spark 1.2s ease 4.4s both}
+@keyframes drive{from{transform:translateX(0)}to{transform:translateX(262px)}}
+@keyframes clean{to{opacity:0}}
+@keyframes bub{0%{opacity:0;transform:translateY(0) scale(.6)}20%{opacity:.9}100%{opacity:0;transform:translateY(-46px) scale(1.1)}}
+@keyframes spark{0%{opacity:0;transform:scale(.2) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(20deg)}100%{opacity:1;transform:scale(1) rotate(45deg)}}
+@media (prefers-reduced-motion:reduce){#car{animation:none;transform:translateX(262px)}#dirt{animation:none;opacity:0}.bub{display:none}.spark{animation:none;opacity:1}}
+
+/* ---------- sections ---------- */
+section{padding:56px 0}
+.kicker{color:var(--slate);font-weight:600;margin-bottom:8px}
+h2{font-size:clamp(2rem,8vw,2.8rem);font-weight:800;margin-bottom:14px}
+.steps{list-style:none;counter-reset:s;display:grid;gap:22px;margin-top:22px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:start}
+.steps li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:1.6rem;width:52px;height:52px;border-radius:50%;background:var(--aqua-soft);color:var(--navy);display:grid;place-items:center}
+.steps b{display:block;font-size:1.1rem}
+.steps span{color:var(--slate)}
+
+/* ---------- booking ---------- */
+.book{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.q{margin-top:28px}
+.q h3{font-size:1.25rem;font-weight:700;margin-bottom:4px}
+.q p{color:var(--slate);font-size:.95rem;margin-bottom:12px}
+.grid{display:grid;gap:10px}
+.dates{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}
+.two{grid-template-columns:1fr 1fr}
+.pick{font:inherit;color:var(--navy);background:var(--chalk);border:2px solid var(--line);border-radius:14px;padding:12px 10px;text-align:left;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.pick:hover{border-color:var(--navy-2)}
+.pick[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.pick:disabled{opacity:.45;cursor:not-allowed;text-decoration:line-through}
+.pick .big{display:block;font-family:var(--display);font-weight:800;font-size:1.5rem;line-height:1}
+.pick .sm{display:block;font-size:.8rem;opacity:.75;margin-top:4px}
+.pick .pr{display:block;font-weight:700;margin-top:6px}
+.wash .pick{padding:14px}
+.wash .pick b{display:block;font-size:1.02rem}
+input{width:100%;font:inherit;padding:15px;border:2px solid var(--line);border-radius:12px;background:var(--chalk);color:var(--navy);margin-top:10px}
+input:focus{border-color:var(--navy-2);outline:none}
+.total{margin-top:26px;background:var(--navy);color:#fff;border-radius:18px;padding:20px}
+.total .row{display:flex;justify-content:space-between;gap:12px;font-size:.95rem;opacity:.85;padding:3px 0}
+.total .amt{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid rgba(255,255,255,.2);margin-top:10px;padding-top:12px}
+.total .amt strong{font-family:var(--display);font-size:2rem;color:var(--aqua)}
+.confirm{width:100%;justify-content:center;margin-top:16px;background:#25D366;color:#fff}
+.confirm:disabled{background:#AEBBC4;cursor:not-allowed}
+.hint{font-size:.9rem;color:var(--slate);margin-top:10px;text-align:center}
+.keys{display:flex;gap:12px;align-items:flex-start;background:var(--aqua-soft);border-radius:14px;padding:14px;margin-top:18px;font-size:.95rem}
+.done{display:none;text-align:center;padding:26px 6px}
+.done.show{display:block;animation:pop .4s ease}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+.done h3{font-size:1.8rem;margin:10px 0}
+.done .cta{margin-top:16px}
+
+/* ---------- prices ---------- */
+.ptable{width:100%;border-collapse:collapse;margin-top:18px;font-size:1rem}
+.ptable th{text-align:left;font-weight:600;color:var(--slate);font-size:.85rem;padding:8px 6px;border-bottom:2px solid var(--navy)}
+.ptable td{padding:14px 6px;border-bottom:1px solid var(--line)}
+.ptable td:not(:first-child),.ptable th:not(:first-child){text-align:right;white-space:nowrap}
+.ptable td b{font-family:var(--display);font-size:1.15rem}
+.sub{background:var(--aqua);color:var(--navy)}
+.sub h2{max-width:14ch}
+.perks{list-style:none;margin-top:18px;display:grid;gap:12px}
+.perks li{display:flex;gap:12px;font-weight:500}
+.perks li::before{content:"";flex:0 0 22px;height:22px;border-radius:50%;background:var(--navy) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%232FD1C5' stroke-width='3' d='M6 12l4 4 8-8'/%3E%3C/svg%3E") center/16px no-repeat;margin-top:2px}
+.sub .price{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,11vw,3.6rem);line-height:1;margin:6px 0 4px}
+
+/* ---------- vision ---------- */
+.why{background:var(--navy);color:#fff}
+.why .kicker{color:var(--aqua)}
+.vmp{display:grid;gap:30px;margin-top:26px}
+.vmp h3{font-size:1.5rem;color:var(--bell);margin-bottom:6px}
+.vmp p{opacity:.9;max-width:60ch}
+.quote{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,6.5vw,2.2rem);line-height:1.15;border-left:5px solid var(--aqua);padding-left:16px;margin-top:34px}
+
+.safe ul{list-style:none;display:grid;gap:16px;margin-top:20px}
+.safe li{padding-left:18px;border-left:3px solid var(--aqua)}
+.safe li b{display:block}
+footer{background:var(--navy);color:#fff;padding:36px 0 calc(36px + env(safe-area-inset-bottom));text-align:center;font-size:.95rem}
+footer a{color:var(--aqua);font-weight:700}
+footer p{opacity:.8;margin-top:6px}
 </style>
 </head>
 <body>
-<header>
-<div class="brand">Edu<span>Wash</span></div>
-<div class="by">by Active Solutions</div>
-<div class="tag">You teach. We wash.</div>
-<div class="slogan"></div>
-<a class="cta" href="#booking">Book my wash</a>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="top">
+      <div class="mark">EduWash<small>by Active Solutions</small></div>
+      <a href="pay.html">Pay</a>
+    </div>
+    <h1><span>You teach.</span><span class="w2">We wash.</span></h1>
+    <p class="lede">Your car, washed in the school parking lot while you're in class. Every school in Mitchells Plain.</p>
+    <p class="slogan"><!-- SLOGAN HERE --></p>
+    <a class="cta" href="#book">Book my wash</a>
+  </div>
+
+  <div class="day wrap" aria-hidden="true">
+    <svg viewBox="0 0 360 120">
+      <line x1="20" y1="96" x2="340" y2="96" stroke="rgba(255,255,255,.25)" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round"/>
+      <g fill="rgba(255,255,255,.5)" font-family="Figtree,sans-serif" font-size="9">
+        <text x="14" y="114">08:00</text><text x="164" y="114">break</text><text x="318" y="114">15:30</text>
+      </g>
+      <!-- bubbles at the wash point -->
+      <g fill="none" stroke="#2FD1C5" stroke-width="1.5">
+        <circle class="bub" cx="170" cy="70" r="5" style="animation-delay:2.1s"/>
+        <circle class="bub" cx="182" cy="62" r="3.5" style="animation-delay:2.35s"/>
+        <circle class="bub" cx="160" cy="58" r="4" style="animation-delay:2.55s"/>
+        <circle class="bub" cx="192" cy="72" r="6" style="animation-delay:2.75s"/>
+        <circle class="bub" cx="176" cy="50" r="3" style="animation-delay:3s"/>
+      </g>
+      <!-- the car -->
+      <g id="car">
+        <g transform="translate(18 52)">
+          <path d="M6 30 L10 18 Q14 8 26 8 L48 8 Q58 8 64 18 L72 20 Q80 22 80 30 L80 36 L6 36 Z" fill="#FFFFFF"/>
+          <path d="M18 18 Q20 12 27 12 L36 12 L36 20 Z M40 12 L48 12 Q55 12 59 20 L40 20 Z" fill="#0D2B4E" opacity=".85"/>
+          <g id="dirt" fill="#8A6D4B" opacity=".75">
+            <ellipse cx="22" cy="30" rx="10" ry="4"/><ellipse cx="52" cy="27" rx="12" ry="4"/>
+            <circle cx="70" cy="31" r="3"/><circle cx="34" cy="24" r="2"/><circle cx="62" cy="22" r="2"/>
+          </g>
+          <circle cx="22" cy="37" r="7" fill="#0D2B4E" stroke="#fff" stroke-width="2"/>
+          <circle cx="64" cy="37" r="7" fill="#0D2B4E" stroke="#fff" stroke-width="2"/>
+        </g>
+      </g>
+      <!-- the final bell sparkle -->
+      <g fill="#FFC93C">
+        <path class="spark" d="M318 40 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
+        <path class="spark" d="M300 28 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" style="animation-delay:4.6s"/>
+      </g>
+    </svg>
+    <div class="daynote"><span>Keys with the secretary</span><span>Clean by the final bell</span></div>
+  </div>
 </header>
+
 <main>
-<section class="card"><h2>How it works</h2>
-<p>1. Pick your day below.<br>2. Leave your keys with the school secretary.<br>3. Your car is clean before the final bell, and your keys are back with the secretary.</p></section>
-<section class="card" id="booking"><h2>Book your wash</h2>
-<label>1. Which day?</label>
-<div class="opts" data-g="day"><button class="opt">Monday</button><button class="opt">Tuesday</button><button class="opt">Wednesday</button><button class="opt">Thursday</button><button class="opt">Friday</button></div>
-<label>2. Your car</label>
-<div class="opts" data-g="car"><button class="opt">Hatchback</button><button class="opt">SUV / Minivan</button></div>
-<label>3. Which wash?</label>
-<div class="opts" data-g="wash"><button class="opt">Outside only</button><button class="opt">Inside only</button><button class="opt">Inside &amp; outside</button><button class="opt">Semi detail</button><button class="opt">Subscription</button></div>
-<label>4. Your details</label>
-<input id="nm" placeholder="Your name"><input id="sc" placeholder="Your school"><input id="rg" placeholder="Car colour and registration">
-<div id="price"></div>
-<button id="book" disabled>Confirm on WhatsApp</button>
-<div class="note">On your wash day, leave your keys with the school secretary. We collect them, wash your car and hand them back. Monday to Friday, 08:00 to 15:30.</div></section>
-<section class="card"><h2>Prices</h2><table><tr><th>Wash</th><th>Hatchback</th><th>SUV / Minivan</th></tr><tr><td>Outside only</td><td>R80</td><td>R100</td></tr><tr><td>Inside only</td><td>R80</td><td>R100</td></tr><tr><td>Inside &amp; outside</td><td>R130</td><td>R160</td></tr><tr><td>Semi detail</td><td>R250</td><td>R300</td></tr></table></section>
-<section class="card sub"><h2>Subscribe and save</h2><p><b>R105 per school week</b> for a hatchback, or <b>R130</b> for an SUV or minivan. One inside-and-outside wash every week.</p><ul><li>Free tyre shine on every wash</li><li>Free semi-detail upgrade every third month</li><li>R50 off when you sign up a colleague</li><li>You pay only for school weeks, never for holidays</li><li>Holiday home washes in Mitchells Plain at the subscriber rate</li></ul></section>
-<section class="card"><h2>More than a car wash</h2><p>EduWash gives educators back their afternoons and weekends, and gives young people in Mitchells Plain a future. Every wash is done by a matriculant on a one-year paid internship, learning skills, discipline and service.</p><p><b>Every wash you book helps launch a young person's career.</b></p></section>
-<section class="card"><h2>Your car is safe with us</h2><p>Your vehicle and everything inside it are our first priority. Every key handover is logged and every car is photographed before and after. We bring our own waterless products, so no school water is used.</p></section>
+  <section>
+    <div class="wrap">
+      <p class="kicker">How it works</p>
+      <h2>Three steps. That's it.</h2>
+      <ol class="steps">
+        <li><div><b>Pick a day</b><span>Choose any school day, Monday to Friday. We take 6 cars per day.</span></div></li>
+        <li><div><b>Leave your keys with the secretary</b><span>Our team collects them after you've parked.</span></div></li>
+        <li><div><b>Teach</b><span>Your car is washed between 08:00 and 15:30, and your keys go back to the secretary.</span></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="book" id="book">
+    <div class="wrap">
+      <div id="form">
+        <p class="kicker">Book a wash</p>
+        <h2>Let's get your car clean.</h2>
+
+        <div class="q">
+          <h3>Which day?</h3>
+          <p>Only 6 cars per day, so book early.</p>
+          <div class="grid dates" id="dates"></div>
+        </div>
+
+        <div class="q">
+          <h3>What do you drive?</h3>
+          <div class="grid two" data-group="car">
+            <button class="pick" data-v="hatch" aria-pressed="false"><span class="big">Hatchback</span><span class="sm">Polo, Swift, i20, sedans</span></button>
+            <button class="pick" data-v="suv" aria-pressed="false"><span class="big">SUV</span><span class="sm">SUVs, bakkies, minivans</span></button>
+          </div>
+        </div>
+
+        <div class="q">
+          <h3>Which wash?</h3>
+          <div class="grid two wash" data-group="wash" id="washes"></div>
+        </div>
+
+        <div class="q">
+          <h3>Your details</h3>
+          <input id="nm" autocomplete="name" placeholder="Your name">
+          <input id="sc" placeholder="Your school">
+          <input id="rg" placeholder="Car colour and number plate (e.g. white CA 123-456)">
+        </div>
+
+        <div class="total" aria-live="polite">
+          <div class="row"><span>Day</span><span id="tDay">Not picked yet</span></div>
+          <div class="row"><span>Car</span><span id="tCar">Not picked yet</span></div>
+          <div class="row"><span>Wash</span><span id="tWash">Not picked yet</span></div>
+          <div class="amt"><span>To pay</span><strong id="tAmt">R0</strong></div>
+        </div>
+        <button class="cta confirm" id="confirm" disabled>Book on WhatsApp</button>
+        <p class="hint" id="hint">Pick a day, a car and a wash, then add your name and school.</p>
+        <div class="keys"><span aria-hidden="true">🔑</span><span>On your wash day, leave your keys with the school secretary before 08:30. We hand them back to her once your car is done.</span></div>
+      </div>
+
+      <div class="done" id="done">
+        <div style="font-size:3rem" aria-hidden="true">✨</div>
+        <h3>Your booking is on its way</h3>
+        <p>WhatsApp opened with your booking. Press send, and we'll confirm your spot.</p>
+        <p style="margin-top:10px">Want to pay now? It takes a minute.</p>
+        <a class="cta" id="payNow" href="pay.html">Pay R0 now</a>
+        <p class="hint"><a href="#book" id="again">Book another car</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="kicker">Prices</p>
+      <h2>Simple prices. No surprises.</h2>
+      <table class="ptable">
+        <thead><tr><th>Wash</th><th>Hatchback</th><th>SUV / minivan</th></tr></thead>
+        <tbody id="ptbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sub">
+    <div class="wrap">
+      <p class="kicker" style="color:var(--navy-2)">For teachers who like a clean car every week</p>
+      <h2>Subscribe and never think about it again.</h2>
+      <p class="price">R105</p>
+      <p>per school week for a hatchback, or R130 for an SUV. One inside-and-outside wash every week.</p>
+      <ul class="perks">
+        <li>Free tyre shine on every wash</li>
+        <li>Free semi-detail upgrade every third month</li>
+        <li>R50 off your next month for every colleague you sign up</li>
+        <li>You only pay for school weeks. Holidays cost you nothing.</li>
+        <li>Holiday home washes in Mitchells Plain at subscriber rates</li>
+      </ul>
+      <a class="cta" href="#book" style="background:var(--navy);color:#fff">Subscribe</a>
+    </div>
+  </section>
+
+  <section class="why">
+    <div class="wrap">
+      <p class="kicker">Why EduWash exists</p>
+      <h2>More than a car wash.</h2>
+      <div class="vmp">
+        <div><h3>Our vision</h3><p>To be the most trusted service for educators in Mitchells Plain, and the first step into working life for its young people.</p></div>
+        <div><h3>Our mission</h3><p>To give educators back their afternoons and weekends by washing their cars safely and properly while they teach, and to give every matriculant on our team a paid year of skills, discipline and purpose.</p></div>
+        <div><h3>Our purpose</h3><p>Teachers give everything to our children, then spend their Saturdays in a car wash queue. Young people finish matric and have nowhere to start. EduWash fixes both. Every washer is a Mitchells Plain matriculant on a one-year paid internship, learning how to work, how a business runs, and how to serve their community.</p></div>
+      </div>
+      <p class="quote">Every wash you book helps a young person take their first step.</p>
+    </div>
+  </section>
+
+  <section class="safe">
+    <div class="wrap">
+      <p class="kicker">Your car is safe with us</p>
+      <h2>Your car and everything in it come first.</h2>
+      <ul>
+        <li><b>Keys only through the secretary</b>Every handover is logged, with the time and the name of the person who took the keys.</li>
+        <li><b>Photos before and after</b>Every car is photographed, so you can see exactly what we did.</li>
+        <li><b>No school water, ever</b>We bring our own waterless products, so your school doesn't pay a cent.</li>
+        <li><b>We don't touch your things</b>Belongings stay exactly where you left them.</li>
+      </ul>
+    </div>
+  </section>
 </main>
-<footer>EduWash by Active Solutions, Mitchells Plain<br>WhatsApp or call <a href="https://wa.me/27679636237">067 963 6237</a></footer>
+
+<footer>
+  <div class="wrap">
+    <div class="mark" style="font-size:1.6rem">EduWash</div>
+    <p>by Active Solutions, Mitchells Plain</p>
+    <p>Monday to Friday, 08:00 to 15:30, during school terms</p>
+    <p style="margin-top:14px">WhatsApp or call <a href="https://wa.me/27679636237">067 963 6237</a></p>
+  </div>
+</footer>
+
 <script>
-const s={};
-document.querySelectorAll('.opts').forEach(g=>g.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{g.querySelectorAll('.opt').forEach(x=>x.classList.remove('on'));b.classList.add('on');s[g.dataset.g]=b.textContent;u();}));
-const P={'Outside only':[80,100],'Inside only':[80,100],'Inside & outside':[130,160],'Semi detail':[250,300],'Subscription':[105,130]};
-const $=i=>document.getElementById(i);
-function u(){if(s.car&&s.wash){const p=P[s.wash][s.car==='Hatchback'?0:1];$('price').textContent=s.wash==='Subscription'?'R'+p+' per school week':'R'+p;}
-$('book').disabled=!(s.day&&s.car&&s.wash&&$('nm').value&&$('sc').value);}
-['nm','sc','rg'].forEach(i=>$(i).oninput=u);
-$('book').onclick=()=>{const m='Hi EduWash! I would like to book:\nDay: '+s.day+'\nCar: '+s.car+'\nWash: '+s.wash+'\nName: '+$('nm').value+'\nSchool: '+$('sc').value+'\nCar details: '+$('rg').value+'\nI will leave my keys with the secretary.';location.href='https://wa.me/27679636237?text='+encodeURIComponent(m);};
+/* ================= CHAD: EDIT ONLY THIS PART ================= */
+const SLOTS_PER_DAY = 6;
+/* Days that are fully booked. Format "YYYY-MM-DD", e.g. ["2026-11-18","2026-11-20"] */
+const FULL_DAYS = [];
+/* School holidays and public holidays when we don't wash */
+const CLOSED_DAYS = [];
+const WHATSAPP = "27679636237";
+/* ============================================================== */
+
+const PRICES = {
+  out:  {name:"Outside only",       note:"Body, wheels, windows",          hatch:80,  suv:100},
+  ins:  {name:"Inside only",        note:"Vacuum, dash, windows inside",   hatch:80,  suv:100},
+  both: {name:"Inside & outside",   note:"The full clean",                 hatch:130, suv:160},
+  semi: {name:"Semi detail",        note:"Deep clean, polish, shine",      hatch:250, suv:300},
+  subs: {name:"Subscription",       note:"Weekly wash, per school week",   hatch:105, suv:130}
+};
+const sel = {date:null, car:null, wash:null};
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2,"0");
+const iso = d => d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const nice = d => d.toLocaleDateString("en-ZA",{weekday:"long", day:"numeric", month:"long"});
+
+/* next 10 school days, starting tomorrow */
+(function buildDates(){
+  const box = $("dates"); const d = new Date(); let made = 0;
+  while(made < 10){
+    d.setDate(d.getDate()+1);
+    const wd = d.getDay(); if(wd===0||wd===6) continue;
+    const key = iso(d); if(CLOSED_DAYS.includes(key)) continue;
+    const full = FULL_DAYS.includes(key);
+    const b = document.createElement("button");
+    b.className="pick"; b.setAttribute("aria-pressed","false"); b.dataset.v=key; b.dataset.label=nice(d);
+    b.innerHTML = '<span class="sm">'+d.toLocaleDateString("en-ZA",{weekday:"short"})+'</span><span class="big">'+d.getDate()+'</span><span class="sm">'+d.toLocaleDateString("en-ZA",{month:"short"})+' · '+(full?"Full":SLOTS_PER_DAY+" slots")+'</span>';
+    if(full) b.disabled = true;
+    b.onclick = () => choose("date", b);
+    box.appendChild(b); made++;
+  }
+})();
+
+/* wash buttons and price table */
+(function buildWashes(){
+  const box=$("washes"), tb=$("ptbody");
+  Object.entries(PRICES).forEach(([k,p])=>{
+    const b=document.createElement("button");
+    b.className="pick"; b.dataset.v=k; b.setAttribute("aria-pressed","false");
+    b.innerHTML='<b>'+p.name+'</b><span class="sm">'+p.note+'</span><span class="pr" data-k="'+k+'">from R'+p.hatch+'</span>';
+    b.onclick=()=>choose("wash",b); box.appendChild(b);
+    if(k!=="subs") tb.insertAdjacentHTML("beforeend",'<tr><td>'+p.name+'<br><span style="color:var(--slate);font-size:.85rem">'+p.note+'</span></td><td><b>R'+p.hatch+'</b></td><td><b>R'+p.suv+'</b></td></tr>');
+  });
+})();
+document.querySelectorAll('[data-group="car"] .pick').forEach(b=>b.onclick=()=>choose("car",b));
+
+function choose(group, btn){
+  btn.parentElement.querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed","false"));
+  btn.setAttribute("aria-pressed","true");
+  sel[group] = group==="date" ? {key:btn.dataset.v, label:btn.dataset.label} : btn.dataset.v;
+  update();
+}
+function amount(){ return sel.car && sel.wash ? PRICES[sel.wash][sel.car] : 0; }
+function update(){
+  document.querySelectorAll(".pr").forEach(el=>{const p=PRICES[el.dataset.k]; el.textContent = sel.car ? "R"+p[sel.car]+(el.dataset.k==="subs"?" / week":"") : "from R"+p.hatch;});
+  $("tDay").textContent = sel.date ? sel.date.label : "Not picked yet";
+  $("tCar").textContent = sel.car ? (sel.car==="hatch"?"Hatchback":"SUV / minivan") : "Not picked yet";
+  $("tWash").textContent = sel.wash ? PRICES[sel.wash].name : "Not picked yet";
+  $("tAmt").textContent = "R"+amount()+(sel.wash==="subs"?" / week":"");
+  const missing = [];
+  if(!sel.date) missing.push("a day"); if(!sel.car) missing.push("your car"); if(!sel.wash) missing.push("a wash");
+  if(!$("nm").value.trim()) missing.push("your name"); if(!$("sc").value.trim()) missing.push("your school");
+  $("confirm").disabled = missing.length>0;
+  $("hint").textContent = missing.length ? "Still needed: "+missing.join(", ")+"." : "All set. Tap to send your booking.";
+}
+["nm","sc","rg"].forEach(i=>$(i).addEventListener("input",update));
+
+$("confirm").onclick = () => {
+  const ref = "EW-"+sel.date.key.slice(5).replace("-","")+"-"+$("nm").value.trim().split(" ")[0].toUpperCase();
+  const msg = "Hi EduWash! I'd like to book a wash.\n\n"+
+    "Day: "+sel.date.label+"\nCar: "+(sel.car==="hatch"?"Hatchback":"SUV / minivan")+
+    "\nWash: "+PRICES[sel.wash].name+"\nPrice: R"+amount()+(sel.wash==="subs"?" per school week":"")+
+    "\nName: "+$("nm").value.trim()+"\nSchool: "+$("sc").value.trim()+"\nCar details: "+($("rg").value.trim()||"-")+
+    "\nReference: "+ref+"\n\nI'll leave my keys with the secretary.";
+  window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(msg), "_blank");
+  $("payNow").href = "pay.html?amount="+amount()+"&ref="+encodeURIComponent(ref);
+  $("payNow").textContent = "Pay R"+amount()+" now";
+  $("form").style.display="none"; $("done").classList.add("show");
+  $("done").scrollIntoView({behavior:"smooth", block:"center"});
+};
+$("again").onclick = e => { e.preventDefault(); $("done").classList.remove("show"); $("form").style.display="block"; $("book").scrollIntoView({behavior:"smooth"}); };
+update();
 </script>
 </body>
 </html>

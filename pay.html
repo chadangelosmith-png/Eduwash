@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pay · EduWash by Active Solutions</title>
+<meta name="theme-color" content="#0D2B4E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D2B4E;--navy-2:#163E6A;--aqua:#2FD1C5;--aqua-soft:#E3F7F5;--bell:#FFC93C;--chalk:#F7FAFB;--slate:#566577;--line:#D7E3EA;
+--display:"Bricolage Grotesque",system-ui,sans-serif;--body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);background:var(--chalk);color:var(--navy);line-height:1.55;font-size:17px}
+:focus-visible{outline:3px solid var(--bell);outline-offset:3px}
+.wrap{max-width:560px;margin:0 auto;padding:0 20px}
+header{background:var(--navy);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 0 34px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.mark{font-family:var(--display);font-weight:800;font-size:1.35rem}
+.mark small{display:block;font-family:var(--body);font-weight:500;font-size:.72rem;opacity:.7}
+.top a{color:#fff;font-weight:600;font-size:.9rem;text-decoration:none;border:1.5px solid rgba(255,255,255,.35);padding:8px 14px;border-radius:999px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,11vw,3.4rem);line-height:1.02;letter-spacing:-.02em;margin-top:30px}
+header p{opacity:.85;margin-top:8px}
+.bill{background:#fff;border-radius:20px;margin-top:-18px;padding:22px;border:1px solid var(--line);position:relative}
+label{display:block;font-weight:600;font-size:.95rem;margin-bottom:6px}
+.amtbox{display:flex;align-items:center;border:2px solid var(--line);border-radius:14px;background:var(--chalk);padding:0 14px}
+.amtbox span{font-family:var(--display);font-weight:800;font-size:2rem}
+.amtbox input{border:0;background:transparent;font-family:var(--display);font-weight:800;font-size:2rem;color:var(--navy);width:100%;padding:10px 6px;outline:none}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.quick button{font:inherit;font-size:.9rem;font-weight:600;border:1.5px solid var(--line);background:#fff;color:var(--navy);border-radius:999px;padding:7px 12px;cursor:pointer}
+.ref{margin-top:18px}
+.ref input{width:100%;font:inherit;padding:14px;border:2px solid var(--line);border-radius:12px;background:var(--chalk);color:var(--navy)}
+h2{font-family:var(--display);font-weight:800;font-size:1.5rem;margin:34px 0 12px}
+.way{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;margin-bottom:16px}
+.way h3{font-family:var(--display);font-size:1.3rem;margin-bottom:4px}
+.way p{color:var(--slate);font-size:.95rem}
+.btn{display:flex;justify-content:center;align-items:center;gap:10px;width:100%;margin-top:16px;font:inherit;font-weight:700;font-size:1.1rem;padding:16px;border-radius:14px;border:0;cursor:pointer;text-decoration:none}
+.card{background:var(--navy);color:#fff}
+.ghost{background:var(--aqua-soft);color:var(--navy)}
+.soon{background:#E9EEF1;color:var(--slate);cursor:not-allowed}
+dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin-top:14px;font-size:.98rem}
+dt{color:var(--slate)}dd{font-weight:600}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,40px);opacity:0;background:var(--navy);color:#fff;padding:12px 18px;border-radius:12px;font-weight:600;transition:.25s}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.safe{display:flex;gap:10px;font-size:.9rem;color:var(--slate);margin:6px 0 40px}
+footer{background:var(--navy);color:#fff;text-align:center;padding:30px 0 calc(30px + env(safe-area-inset-bottom));font-size:.95rem}
+footer a{color:var(--aqua);font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top"><div class="mark">EduWash<small>by Active Solutions</small></div><a href="index.html">Book</a></div>
+    <h1>Pay for your wash</h1>
+    <p>Pay by card or EFT. Your reference tells us which booking it's for.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="bill">
+    <label for="amt">Amount</label>
+    <div class="amtbox"><span>R</span><input id="amt" inputmode="numeric" placeholder="0"></div>
+    <div class="quick" id="quick"></div>
+    <div class="ref">
+      <label for="ref">Your reference</label>
+      <input id="ref" placeholder="Your name and school, e.g. Jansen Westridge">
+    </div>
+  </div>
+
+  <h2>Choose how to pay</h2>
+
+  <div class="way">
+    <h3>Card</h3>
+    <p>Visa or Mastercard, on a secure payment page. Enter the amount above when it asks.</p>
+    <a class="btn card" id="cardBtn" target="_blank" rel="noopener">Pay by card</a>
+  </div>
+
+  <div class="way">
+    <h3>EFT</h3>
+    <p>Use your reference so we can match your payment.</p>
+    <dl id="bank"></dl>
+    <button class="btn ghost" id="copy">Copy account number</button>
+  </div>
+
+  <p class="safe"><span aria-hidden="true">🔒</span><span>EduWash never asks for your card details on WhatsApp or over the phone. Card payments are handled by our payment provider, not by us.</span></p>
+</main>
+
+<footer>
+  <div class="wrap">Questions? WhatsApp <a href="https://wa.me/27679636237">067 963 6237</a></div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ================= CHAD: EDIT ONLY THIS PART ================= */
+/* Paste your Yoco (or PayFast) payment link between the quotes */
+const CARD_PAYMENT_LINK = "";
+/* Your business bank details for EFT */
+const BANK = { bank:"", name:"Active Solutions", account:"", branch:"", type:"" };
+/* ============================================================== */
+
+const $=id=>document.getElementById(id);
+const q=new URLSearchParams(location.search);
+if(q.get("amount")) $("amt").value=q.get("amount");
+if(q.get("ref")) $("ref").value=q.get("ref");
+
+[["Outside, hatch",80],["Inside & outside, hatch",130],["Inside & outside, SUV",160],["Weekly sub, hatch",105]].forEach(([t,v])=>{
+  const b=document.createElement("button"); b.textContent=t+" R"+v; b.onclick=()=>{$("amt").value=v;}; $("quick").appendChild(b);
+});
+
+const card=$("cardBtn");
+if(CARD_PAYMENT_LINK){ card.href=CARD_PAYMENT_LINK; }
+else { card.classList.replace("card","soon"); card.textContent="Card payments open soon"; card.removeAttribute("href"); card.setAttribute("aria-disabled","true"); }
+
+const rows=[["Bank",BANK.bank],["Account name",BANK.name],["Account number",BANK.account],["Branch code",BANK.branch],["Account type",BANK.type]];
+if(BANK.account){ $("bank").innerHTML=rows.filter(r=>r[1]).map(r=>"<dt>"+r[0]+"</dt><dd>"+r[1]+"</dd>").join("")+"<dt>Reference</dt><dd id='refShow'></dd>";
+  const sync=()=>{const el=$("refShow"); if(el) el.textContent=$("ref").value||"Your name and school";}; $("ref").addEventListener("input",sync); sync(); }
+else { $("bank").innerHTML="<dt>Coming soon</dt><dd>WhatsApp us for banking details</dd>"; $("copy").style.display="none"; }
+
+$("copy").onclick=async()=>{ try{ await navigator.clipboard.writeText(BANK.account); toast("Account number copied"); }catch(e){ toast("Couldn't copy. Hold down on the number to copy it."); } };
+function toast(t){ const el=$("toast"); el.textContent=t; el.classList.add("on"); setTimeout(()=>el.classList.remove("on"),2200); }
+</script>
+</body>
+</html>
